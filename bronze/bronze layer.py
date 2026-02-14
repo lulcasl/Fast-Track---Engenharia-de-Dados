@@ -4,7 +4,7 @@ import os
 
 # Ler o JSON na camada bronze.
 # Entender melhor o with [!]
-with open('jira_issues_raw.json', 'r', encoding='utf-8') as file:
+with open('bronze/jira_issues_raw.json', 'r', encoding='utf-8') as file:
     data = json.load(file)
 
 # Criando o dataframe para ser referenciado posteriormente.
@@ -37,3 +37,6 @@ print(df_bronze.head(5), "\n")
 # Até aqui foram todos os dadods sobre issues, preciso trazer tudo
 # que esteja relacionado a parte de projetos também
 # ===================================================================
+
+# Aqui, criar nova coluna com os dados de 'project'
+# df_bronze['project_id'] = 
