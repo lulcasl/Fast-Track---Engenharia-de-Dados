@@ -2,10 +2,18 @@ import pandas as pd
 import json
 import os
 
-# Ler o JSON na camada bronze.
+
+# ====================================================================
+# Etapa 0: Abrir o JSON, definindo o caminho relativo do arquivo.
+# ====================================================================
+
 # Entender melhor o with [!]
 with open('bronze/jira_issues_raw.json', 'r', encoding='utf-8') as file:
     data = json.load(file)
+
+# ====================================================================
+# Etapa 1: Criar um dataframe a partir do JSON.
+# ====================================================================
 
 # Criando o dataframe para ser referenciado posteriormente.
 df_bronze = pd.DataFrame(data['issues'])
@@ -20,9 +28,21 @@ print("=== 🐼  ISSUES ===")
 print(type(data['issues']), "\n")
 # Função f converte automaticamente todos os dados para string.
 
-# Verificar as colunas existentes.
+# Como issues é uma lista, verificar o tipo de dados da primeira linha.
 print("=== 🐼  COLUNAS ===")
-print(df_bronze.columns.tolist(), "\n")
+for col in df_bronze.columns:
+    print(f"{col}: {type(df_bronze[col][0])}")
+print("\n")
+
+# Ver o tipo exato do primeiro valor de 'assignee'
+print("Tipo de 'assignee':")
+print(type(df_bronze['assignee'][0]))
+print(df_bronze['assignee'][0], "\n")
+
+# Ver o tipo exato do primeiro valor de 'timestamps'
+print("Tipo de 'timestamps':")
+print(type(df_bronze['timestamps'][0]))
+print(df_bronze['timestamps'][0], "\n")
 
 # Trazer algumas informações gerais com a função info() do pandas.
 print("=== 🐼  INFORMAÇÕES ===")
@@ -32,11 +52,30 @@ print(df_bronze.info(), "\n")
 print("=== 🐼 CONTEÚDO ===")
 print(df_bronze.head(5), "\n")
 
-
 # ===================================================================
-# Até aqui foram todos os dadods sobre issues, preciso trazer tudo
-# que esteja relacionado a parte de projetos também
+# Etapa 2: Criar novas colunas com os dados de 'project'.
 # ===================================================================
 
-# Aqui, criar nova coluna com os dados de 'project'
-# df_bronze['project_id'] = 
+# Aqui, criar nova coluna com os dados de 'project', referenciado diretamente 
+# as colunas do arquivo, conforme dicionário aberto anteriormente
+df_bronze['project_id'] = data['project']['project_id']
+df_bronze['project_name'] = data['project']['project_name']
+df_bronze['extracted_at'] = data['project']['extracted_at']
+
+# Verificar o conteúdo dos cinco primeiros registros com os novos dados.
+print("=== 🐼 CONTEÚDO ATUALIZADO ===")
+print(df_bronze.head(5), "\n")
+
+# ===================================================================
+# Etapa 3: Trazer um timestamp com os dados da extração.
+# ===================================================================
+
+# Lembrando que ingerir =/= extrair.
+df_bronze['ingested_at'] = pd.Timestamp.now()
+
+print("=== 🐼 CONTEÚDO ATUALIZADO v2 ===")
+print(df_bronze.head(5), "\n")
+
+# ===================================================================
+# Etapa 4: Tratativa de campos aninhados.
+# ===================================================================
