@@ -2,7 +2,6 @@ import pandas as pd
 import json
 import os
 
-
 # ====================================================================
 # Etapa 0: Abrir o JSON, definindo o caminho relativo do arquivo.
 # ====================================================================
@@ -34,12 +33,12 @@ for col in df_bronze.columns:
     print(f"{col}: {type(df_bronze[col][0])}")
 print("\n")
 
-# Ver o tipo exato do primeiro valor de 'assignee'
+# Ver o tipo do primeiro valor de 'assignee'
 print("Tipo de 'assignee':")
 print(type(df_bronze['assignee'][0]))
 print(df_bronze['assignee'][0], "\n")
 
-# Ver o tipo exato do primeiro valor de 'timestamps'
+# Ver o tipo do primeiro valor de 'timestamps'
 print("Tipo de 'timestamps':")
 print(type(df_bronze['timestamps'][0]))
 print(df_bronze['timestamps'][0], "\n")
@@ -79,3 +78,21 @@ print(df_bronze.head(5), "\n")
 # ===================================================================
 # Etapa 4: Tratativa de campos aninhados.
 # ===================================================================
+
+# Na camada bronze, segundo a metodologia, os campos permanecem como
+# listas, mantendo a estrutura original do JSON. A tratativa será feita
+# na camada Silver.
+
+# ===================================================================
+# Etapa 5: Finalizando a camada bronze.
+# ===================================================================
+
+# Salvar o dataframe final na camada bronze com uma função específica
+# do Pandas para Parquet. 
+df_bronze.to_json('bronze/bronze_issues.json', 
+                  orient='records', 
+                  lines=True, 
+                  force_ascii=False)
+
+if os.path.exists('bronze/bronze_issues.json'):
+    print("✅ Arquivo salvo com sucesso!")
