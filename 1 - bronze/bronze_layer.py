@@ -73,7 +73,7 @@ print(df_bronze.head(5), "\n")
 # Lembrando que ingerir =/= extrair.
 df_bronze['ingested_at'] = pd.Timestamp.now()
 
-print("=== 🐼 CONTEÚDO ATUALIZADO v2 ===")
+print("=== CONTEÚDO ATUALIZADO v2 ===")
 print(df_bronze.head(5), "\n")
 
 # ===================================================================
@@ -105,6 +105,11 @@ df_bronze.to_json('1 - bronze/bronze_issues.json',
 
 # Por esses três motivos e um pouco pela maneira que prefiro ler
 # e trabalhar com os dados, acho mais simples.
+
+print("=== LISTA FINAL DE COLUNAS ===")
+for col in df_bronze.columns:
+    print(f"{col}: {type(df_bronze[col][0])}")
+print("\n")
 
 if os.path.exists('1 - bronze/bronze_issues.json'):
     print("Arquivo salvo com sucesso!")
