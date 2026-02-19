@@ -18,17 +18,17 @@ with open("1 - bronze/jira_issues_raw.json", "r", encoding="utf-8") as file:
 df_bronze = pd.DataFrame(data["issues"])
 
 # Verifica o tipo do conteúdo que temos no JSON.
-print("=== 🐼  PROJECT ===")
+print("=== PROJECT ===")
 print(type(data['project']))
 print(data['project'], "\n")
 
 # Verificar o conteúdo de 'issues'.
-print("=== 🐼  ISSUES ===")
+print("=== ISSUES ===")
 print(type(data['issues']), "\n")
 # Função f converte automaticamente todos os dados para string.
 
 # Como issues é uma lista, verificar o tipo de dados da primeira linha.
-print("=== 🐼  COLUNAS ===")
+print("=== COLUNAS ===")
 for col in df_bronze.columns:
     print(f"{col}: {type(df_bronze[col][0])}")
 print("\n")
@@ -44,11 +44,12 @@ print(type(df_bronze['timestamps'][0]))
 print(df_bronze['timestamps'][0], "\n")
 
 # Trazer algumas informações gerais com a função info() do pandas.
-print("=== 🐼  INFORMAÇÕES ===")
-print(df_bronze.info(), "\n")
+print("=== INFORMAÇÕES ===")
+df_bronze.info()
+print("\n")
 
 # Verificar o conteúdo dos cinco primeiros registros.
-print("=== 🐼 CONTEÚDO ===")
+print("=== CONTEÚDO ===")
 print(df_bronze.head(5), "\n")
 
 # ===================================================================
@@ -62,7 +63,7 @@ df_bronze['project_name'] = data['project']['project_name']
 df_bronze['extracted_at'] = data['project']['extracted_at']
 
 # Verificar o conteúdo dos cinco primeiros registros com os novos dados.
-print("=== 🐼 CONTEÚDO ATUALIZADO ===")
+print("=== CONTEÚDO ATUALIZADO ===")
 print(df_bronze.head(5), "\n")
 
 # ===================================================================
@@ -106,4 +107,4 @@ df_bronze.to_json('1 - bronze/bronze_issues.json',
 # e trabalhar com os dados, acho mais simples.
 
 if os.path.exists('1 - bronze/bronze_issues.json'):
-    print("✅ Arquivo salvo com sucesso!")
+    print("Arquivo salvo com sucesso!")

@@ -13,10 +13,10 @@ bronze_file_path = '1 - bronze/bronze_issues.json'
 # Lembrar da PEP8 [!].
 df_silver = pd.read_json(bronze_file_path, lines=True)
 
-print("=== 🐼 DADOS GERAIS ===")
+print("=== DADOS GERAIS ===")
 print(df_silver.head(), "\n")
-print(df_silver.info())
-print(f"Total de linhas: {len(df_silver)}")
+df_silver.info()
+print("\n", f"Total de linhas: {len(df_silver)}")
 print(f"Total de colunas: {len(df_silver.columns)}")
 
 # ====================================================================
