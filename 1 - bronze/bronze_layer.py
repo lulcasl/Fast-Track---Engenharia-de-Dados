@@ -7,7 +7,7 @@ import os
 # ====================================================================
 
 # Entender melhor o with [!]
-with open('bronze/jira_issues_raw.json', 'r', encoding='utf-8') as file:
+with open("1 - bronze/jira_issues_raw.json", "r", encoding="utf-8") as file:
     data = json.load(file)
 
 # ====================================================================
@@ -15,7 +15,7 @@ with open('bronze/jira_issues_raw.json', 'r', encoding='utf-8') as file:
 # ====================================================================
 
 # Criando o dataframe para ser referenciado posteriormente.
-df_bronze = pd.DataFrame(data['issues'])
+df_bronze = pd.DataFrame(data["issues"])
 
 # Verifica o tipo do conteúdo que temos no JSON.
 print("=== 🐼  PROJECT ===")
@@ -88,11 +88,22 @@ print(df_bronze.head(5), "\n")
 # ===================================================================
 
 # Salvar o dataframe final na camada bronze com uma função específica
-# do Pandas para Parquet. 
-df_bronze.to_json('bronze/bronze_issues.json', 
+# do Pandas para JSON. Inicialmente pensei em fazer com parquet, mas
+# apesar dos ganhos do parquet, eu teria que baixar outras bibliotecas
+# o que iria contra as regras do desafio.
+
+df_bronze.to_json('1 - bronze/bronze_issues.json', 
                   orient='records', 
                   lines=True, 
                   force_ascii=False)
 
-if os.path.exists('bronze/bronze_issues.json'):
+# Decidi salvar como JSON com lines = true por três motivos:
+# 1. Simplificdade na leitura do arquivo;
+# 2. Melhor performance;
+# 3. Arquivo menor.
+
+# Por esses três motivos e um pouco pela maneira que prefiro ler
+# e trabalhar com os dados, acho mais simples.
+
+if os.path.exists('1 - bronze/bronze_issues.json'):
     print("✅ Arquivo salvo com sucesso!")
