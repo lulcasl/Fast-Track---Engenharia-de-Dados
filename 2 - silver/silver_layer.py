@@ -86,14 +86,23 @@ df_silver.info()
 print("\n", f"Total de linhas: {len(df_silver)}")
 print(f"Total de colunas: {len(df_silver.columns)}", "\n")
 
-print("=== CONTEÚDO ATUALIZADO v2 ===")
-print(df_silver.head(5), "\n")
 # ====================================================================
 # Etapa 3: Ajustar a tipagem de dados.
 # ====================================================================
+
+# errors = coerce transformar os erros em NaT (Nott a Time), que é o equivalente a NaN para datas
+df_silver['timestamp_updated_at'] = pd.to_datetime(df_silver['timestamp_updated_at'], errors='coerce')
+df_silver['timestamp_created_at'] = pd.to_datetime(df_silver['timestamp_created_at'], errors='coerce')
+
+# Verificar tipos de dados após conversão
+print("Tipos de dados das colunas de data:")
+print(df_silver[['timestamp_created_at', 'timestamp_updated_at']].dtypes)
+print()
 
 # ====================================================================
 # Etapa 4: Limpeza.
 # ====================================================================
 
-
+# Verificar total ANTES da limpeza
+print(f"Total de registros ANTES da limpeza: {len(df_silver)}")
+print()
