@@ -32,3 +32,41 @@ print(df_gold['issue_status'].value_counts())
 print("\nPriority distribution:")
 print(df_gold['issue_priority'].value_counts())
 print()
+
+# ====================================================================
+# Etapa 3: Cálculo de tempo de resolução (horas)
+# ====================================================================
+
+# Calcula a diferença das colunas e converte os segundos em horas.
+df_gold['resolution_time_hours'] = (df_gold['timestamp_updated_at'] - df_gold['timestamp_created_at']).dt.total_seconds() / 3600
+
+# Checagem
+print("=== RESOLUTION TIME CALCULATED ===")
+print("Resolution time statistics:")
+print(df_gold['resolution_time_hours'].describe())
+print()
+
+print("Sample data:")
+print(df_gold[['issue_id', 'issue_priority', 'timestamp_created_at', 'timestamp_updated_at', 'resolution_time_hours']].head(10))
+
+# Mapeamento das prioridades com base nas regras definidas.
+map_priority_sla = {
+    'High': 24,
+    'Medium': 72,
+    'Low': 120
+}
+
+#  Criando a nova coluna chamada 'sla_expected_hours'.
+df_gold['sla_expected_hours'] = df_gold['issue_priority'].map(map_priority_sla)
+
+print("=== SLA EXPECTED HOURS CALCULATED ===")
+print("SLA expected hours statistics:")
+print(df_gold['sla_expected_hours'].describe())
+print()
+
+df_gold['is_sla_met'] = df_gold['resolution_time_hours'] <= df_gold['sla_expected_hours']
+
+print("=== SLA MET CALCULATED ===")
+print("SLA met distribution:")
+print(df_gold['is_sla_met'].value_counts())
+print()
