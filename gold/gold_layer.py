@@ -1,16 +1,15 @@
+import sys
 import pandas as pd
 import json
 import os
+from calculate_sla import calculate_business_hours, get_holidays_for_date_range
 
 # ====================================================================
-# Etapa 1: Ler o arquivo criado na camada silver
+# Etapa 1: Read the file in the silver layer
 # ====================================================================
-
-# Definir o arquivo criado na camada anterior.
-silver_file_path = 'silver/silver_issues.json'
 
 # Ler o arquivo. Como coloquei o lines na bronze, preciso chamar aqui.
-df_gold = pd.read_json(silver_file_path, lines=True)
+df_gold = pd.read_json("silver/silver_issues.json", lines=True)
 
 print("=== GENERAL DATA ===")
 print(df_gold.head(), "\n")
@@ -19,7 +18,7 @@ print("\n", f"Lines Total: {len(df_gold)}")
 print(f"Column Total: {len(df_gold.columns)}", "\n")
 
 # ====================================================================
-# Etapa 2: Filtrar apenas os issues Done e Resolved
+# Step 2: Filter only Done and Resolved issues
 # ====================================================================
 
 df_gold = df_gold[df_gold['issue_status'].isin(['Done', 'Resolved'])]
@@ -34,13 +33,24 @@ print(df_gold['issue_priority'].value_counts())
 print()
 
 # ====================================================================
-# Step 3: Cálculo de tempo de resolução (horas)
+# Step 3: Calculate resolution time and SLA compliance
 # ====================================================================
 
-# Calcula a diferença das colunas e converte os segundos em horas.
-df_gold['resolution_time_hours'] = (df_gold['timestamp_updated_at'] - df_gold['timestamp_created_at']).dt.total_seconds() / 3600
+# Calculates the difference between dates and converts to hours, only in business hours
+# Calculating row by row with apply
+def calculate_business_hours(row):
+    return calculate_business_hours(
+    row['timestamp_created_at'], 
+    row['timestamp_updated_at'],
+    holidays = get_holidays_for_date_range(
+        row['timestamp_created_at'], 
+        row['timestamp_updated_at']
+        )
+    )
 
-# Checagem
+df_gold['resolution_time_hours'] = df_gold.apply(calculate_business_hours, axis=1) 
+
+# Check if the  calculation is correctly applied.
 print("=== RESOLUTION TIME CALCULATED ===")
 print("Resolution time statistics:")
 print(df_gold['resolution_time_hours'].describe())
@@ -49,14 +59,14 @@ print()
 print("Sample data:")
 print(df_gold[['issue_id', 'issue_priority', 'timestamp_created_at', 'timestamp_updated_at', 'resolution_time_hours']].head(10))
 
-# Mapeamento das prioridades com base nas regras definidas.
+# Mapping the expected SLA hours based on priority, as defined in the documentation.
 map_priority_sla = {
     'High': 24,
     'Medium': 72,
     'Low': 120
 }
 
-#  Criando a nova coluna chamada 'sla_expected_hours'.
+#  Creating new row 'sla_expected_hours'.
 df_gold['sla_expected_hours'] = df_gold['issue_priority'].map(map_priority_sla)
 
 print("=== SLA EXPECTED HOURS CALCULATED ===")
@@ -73,12 +83,12 @@ print()
 
 print("=== SLA COMPLIANCE BY PRIORITY ===")
 
-# Agrupar por prioridade
+# Aggregating by priority
 sla_by_priority = df_gold.groupby('issue_priority').agg({
     'is_sla_met': ['sum', 'count']
 })
 
-# Calcular percentual
+# Calculating percentage
 sla_by_priority.columns = ['sla_met', 'total']
 sla_by_priority['sla_compliance_rate'] = (sla_by_priority['sla_met'] / sla_by_priority['total'] * 100).round(2)
 
@@ -101,7 +111,7 @@ df_gold_final = df_gold[[
     'is_sla_met'
 ]]
 
-# Verificar estrutura final
+# Checking final structure of the Gold table before saving.
 print("=== FINAL GOLD TABLE STRUCTURE ===")
 print(f"Total records: {len(df_gold_final)}")
 print(f"Total columns: {len(df_gold_final.columns)}")
@@ -115,7 +125,7 @@ print("First 10 rows:")
 print(df_gold_final.head(10))
 
 # ====================================================================
-# Step 5: Save Gold layer main table
+# Step 5: Save Gold layer
 # ====================================================================
 
 # Save main Gold table

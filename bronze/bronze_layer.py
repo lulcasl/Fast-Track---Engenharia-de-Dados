@@ -3,113 +3,95 @@ import json
 import os
 
 # ====================================================================
-# Etapa 0: Abrir o JSON, definindo o caminho relativo do arquivo.
+# Step 1: Open the JSON file, setting relative path to file.
 # ====================================================================
 
-# Entender melhor o with [!]
 with open("bronze/jira_issues_raw.json", "r", encoding="utf-8") as file:
     data = json.load(file)
 
 # ====================================================================
-# Etapa 1: Criar um dataframe a partir do JSON.
+# Step 2: Creating the dataframe from the JSON file.
 # ====================================================================
 
-# Criando o dataframe para ser referenciado posteriormente.
+# Creating the dataframe.
 df_bronze = pd.DataFrame(data["issues"])
 
-# Verifica o tipo do conteúdo que temos no JSON.
+print("=== INITIAL INFORMATION ===", "\n")
+
+# Checking the content type of 'project'.
 print("=== PROJECT ===")
 print(type(data['project']))
 print(data['project'], "\n")
 
-# Verificar o conteúdo de 'issues'.
+# Checking the content type of 'issues'.
 print("=== ISSUES ===")
 print(type(data['issues']), "\n")
-# Função f converte automaticamente todos os dados para string.
 
-# Como issues é uma lista, verificar o tipo de dados da primeira linha.
-print("=== COLUNAS ===")
+# Since issues is a list check the content type of the first row.
+print("=== COLUMNS ===")
 for col in df_bronze.columns:
     print(f"{col}: {type(df_bronze[col][0])}")
-print("\n")
 
-# Ver o tipo do primeiro valor de 'assignee'
-print("Tipo de 'assignee':")
+print("\n","=== CHECK ASSIGNEE LIST ===")
+# Checking the type of 'assignee'
+print("Types of 'assignee':")
 print(type(df_bronze['assignee'][0]))
 print(df_bronze['assignee'][0], "\n")
 
-# Ver o tipo do primeiro valor de 'timestamps'
-print("Tipo de 'timestamps':")
+print("\n","=== CHECK TIMESTAMPS LIST ===")
+# Checking the type of 'timestamps'
+print("Types of 'timestamps':")
 print(type(df_bronze['timestamps'][0]))
 print(df_bronze['timestamps'][0], "\n")
 
-# Trazer algumas informações gerais com a função info() do pandas.
-print("=== INFORMAÇÕES ===")
+# Calling general information from dataframe with info()
+print("=== INFORMATIONS ===")
 df_bronze.info()
 print("\n")
 
-# Verificar o conteúdo dos cinco primeiros registros.
-print("=== CONTEÚDO ===")
-print(df_bronze.head(5), "\n")
-
 # ===================================================================
-# Etapa 2: Criar novas colunas com os dados de 'project'.
+# Step 3: Create new columns with data from 'project'.
 # ===================================================================
 
-# Aqui, criar nova coluna com os dados de 'project', referenciado diretamente 
-# as colunas do arquivo, conforme dicionário aberto anteriormente
+# Create new column with data from 'project', directly referencing
+# the columns from the file, as per the open dictionary above.
 df_bronze['project_id'] = data['project']['project_id']
 df_bronze['project_name'] = data['project']['project_name']
 df_bronze['extracted_at'] = data['project']['extracted_at']
 
-# Verificar o conteúdo dos cinco primeiros registros com os novos dados.
-print("=== CONTEÚDO ATUALIZADO ===")
-print(df_bronze.head(5), "\n")
-
 # ===================================================================
-# Etapa 3: Trazer um timestamp com os dados da extração.
+# Step 4: Generate timestamp from ingested_at.
 # ===================================================================
 
-# Lembrando que ingerir =/= extrair.
+# Friendly reminder for myself that ingest =/= exctract.
 df_bronze['ingested_at'] = pd.Timestamp.now()
 
-print("=== CONTEÚDO ATUALIZADO v2 ===")
+print("=== UPDATED CONTENT ===")
 print(df_bronze.head(5), "\n")
 
 # ===================================================================
-# Etapa 4: Tratativa de campos aninhados.
+# Step 5: Finishing the bronze layer.
 # ===================================================================
 
-# Na camada bronze, segundo a metodologia, os campos permanecem como
-# listas, mantendo a estrutura original do JSON. A tratativa será feita
-# na camada Silver.
-
-# ===================================================================
-# Etapa 5: Finalizando a camada bronze.
-# ===================================================================
-
-# Salvar o dataframe final na camada bronze com uma função específica
-# do Pandas para JSON. Inicialmente pensei em fazer com parquet, mas
-# apesar dos ganhos do parquet, eu teria que baixar outras bibliotecas
-# o que iria contra as regras do desafio.
+# Saving the final dataframe in the bronze layer with a specific function
+# from Pandas for JSON. Initially I thought about doing it with parquet, but
+# even though parquet has gains, I would have to download other libraries
+# which would go against the rules of the challenge.
 
 df_bronze.to_json('bronze/bronze_issues.json', 
                   orient='records', 
                   lines=True, 
                   force_ascii=False)
 
-# Decidi salvar como JSON com lines = true por três motivos:
-# 1. Simplificdade na leitura do arquivo;
-# 2. Melhor performance;
-# 3. Arquivo menor.
+# I decided to save as JSON with lines = true for three reasons:
+# 1. Simplicity in reading the file;
+# 2. Better performance;
+# 3. Smaller file.
 
-# Por esses três motivos e um pouco pela maneira que prefiro ler
-# e trabalhar com os dados, acho mais simples.
-
-print("=== LISTA FINAL DE COLUNAS ===")
+print("=== FINAL COLUMNS ===")
 for col in df_bronze.columns:
     print(f"{col}: {type(df_bronze[col][0])}")
 print("\n")
 
 if os.path.exists('bronze/bronze_issues.json'):
-    print("✅ Arquivo salvo com sucesso!")
+    print("✅ File saved successfully!")
