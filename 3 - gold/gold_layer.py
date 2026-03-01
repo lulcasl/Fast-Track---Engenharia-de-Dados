@@ -70,3 +70,17 @@ print("=== SLA MET CALCULATED ===")
 print("SLA met distribution:")
 print(df_gold['is_sla_met'].value_counts())
 print()
+
+print("=== SLA COMPLIANCE BY PRIORITY ===")
+
+# Agrupar por prioridade
+calculate_sla_by_priority = df_gold.groupby('issue_priority').agg({
+    'is_sla_met': ['sum', 'count']
+})
+
+# Calcular percentual
+calculate_sla_by_priority.columns = ['sla_met', 'total']
+calculate_sla_by_priority['sla_compliance_rate'] = (calculate_sla_by_priority['sla_met'] / calculate_sla_by_priority['total'] * 100).round(2)
+
+print(calculate_sla_by_priority)
+print()
