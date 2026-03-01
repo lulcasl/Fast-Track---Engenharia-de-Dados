@@ -7,7 +7,7 @@ import os
 # ====================================================================
 
 # Entender melhor o with [!]
-with open("1 - bronze/jira_issues_raw.json", "r", encoding="utf-8") as file:
+with open("bronze/jira_issues_raw.json", "r", encoding="utf-8") as file:
     data = json.load(file)
 
 # ====================================================================
@@ -111,5 +111,5 @@ for col in df_bronze.columns:
     print(f"{col}: {type(df_bronze[col][0])}")
 print("\n")
 
-if os.path.exists('1 - bronze/bronze_issues.json'):
-    print("Arquivo salvo com sucesso!")
+if os.path.exists('bronze/bronze_issues.json'):
+    print("✅ Arquivo salvo com sucesso!")

@@ -1,3 +1,6 @@
-1 - bronze/bronze_issues.json
-1 - bronze/recursos.md
-2 - silver/silver_issues.json
+bronze/bronze_issues.json
+bronze/recursos.md
+silver/silver_issues.json
+gold/gold_sla_issues.json
+gold/gold_sla_by_analyst.csv
+gold/gold_sla_by_issue_type.csv

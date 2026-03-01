@@ -7,7 +7,7 @@ import os
 # ====================================================================
 
 # Definir o arquivo criado na camada anterior.
-bronze_file_path = '1 - bronze/bronze_issues.json'
+bronze_file_path = 'bronze/bronze_issues.json'
 
 # Ler o arquivo. Como coloquei o lines na bronze, preciso chamar aqui.
 # Lembrar da PEP8 [!].
@@ -136,10 +136,10 @@ remaining_inconsistent = (df_silver['issue_status'].isin(['Done', 'Resolved']) &
 print(f"Remaining inconsistent records: {remaining_inconsistent}")
 
 # Salva o arquivo final
-df_silver.to_json('2 - silver/silver_issues.json', 
+df_silver.to_json('silver/silver_issues.json', 
                   orient='records', 
                   lines=True, 
                   force_ascii=False)
 
-if os.path.exists('2 - silver/silver_issues.json'):
-    print("Arquivo salvo com sucesso!")
+if os.path.exists('silver/silver_issues.json'):
+    print("✅ Arquivo salvo com sucesso!")
