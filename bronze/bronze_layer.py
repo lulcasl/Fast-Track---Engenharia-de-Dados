@@ -93,7 +93,7 @@ print(df_bronze.head(5), "\n")
 # apesar dos ganhos do parquet, eu teria que baixar outras bibliotecas
 # o que iria contra as regras do desafio.
 
-df_bronze.to_json('1 - bronze/bronze_issues.json', 
+df_bronze.to_json('bronze/bronze_issues.json', 
                   orient='records', 
                   lines=True, 
                   force_ascii=False)
