@@ -128,26 +128,27 @@ if __name__ == "__main__":
     for h in holidays[:]:
         print(f"  - {h.strftime('%Y-%m-%d')}")
         
-# Test calculate_business_hours
-print("\n=== TEST calculate_business_hours ===")
-    
-# Test 1: Simple weekday calculation (no weekends, no holidays)
-start = datetime(2025, 1, 6, 9, 0)   # Monday 9 AM
-end = datetime(2025, 1, 8, 17, 0)     # Wednesday 5 PM
-hours = calculate_business_hours(start, end)
-print(f"\nTest 1: Mon 9AM to Wed 5PM")
-print(f"Business hours: {hours:.2f}h")
-    
-# Test 2: Including weekend
-start = datetime(2025, 1, 10, 9, 0)   # Friday 9 AM
-end = datetime(2025, 1, 13, 17, 0)    # Monday 5 PM (crosses weekend)
-hours = calculate_business_hours(start, end)
-print(f"\nTest 2: Fri 9AM to Mon 5PM (crosses weekend)")
-print(f"Business hours: {hours:.2f}h (should exclude Sat-Sun)")
-    
-# Test 3: Including holiday
-start = datetime(2025, 1, 1, 9, 0)    # New Year (holiday)
-end = datetime(2025, 1, 3, 17, 0)     # Friday 5 PM
-hours = calculate_business_hours(start, end)
-print(f"\nTest 3: Jan 1 (holiday) to Jan 3")
-print(f"Business hours: {hours:.2f}h (should exclude Jan 1)")
+if __name__ == "__main__":        
+    # Test calculate_business_hours
+    print("\n=== TEST calculate_business_hours ===")
+        
+    # Test 1: Simple weekday calculation (no weekends, no holidays)
+    start = datetime(2025, 1, 6, 9, 0)   # Monday 9 AM
+    end = datetime(2025, 1, 8, 17, 0)     # Wednesday 5 PM
+    hours = calculate_business_hours(start, end)
+    print(f"\nTest 1: Mon 9AM to Wed 5PM")
+    print(f"Business hours: {hours:.2f}h")
+        
+    # Test 2: Including weekend
+    start = datetime(2025, 1, 10, 9, 0)   # Friday 9 AM
+    end = datetime(2025, 1, 13, 17, 0)    # Monday 5 PM (trough weekend)
+    hours = calculate_business_hours(start, end)
+    print(f"\nTest 2: Fri 9AM to Mon 5PM (crosses weekend)")
+    print(f"Business hours: {hours:.2f}h (should exclude Sat-Sun)")
+        
+    # Test 3: Including holiday
+    start = datetime(2025, 1, 1, 9, 0)    # New Year (holiday)
+    end = datetime(2025, 1, 3, 17, 0)     # Friday 5 PM
+    hours = calculate_business_hours(start, end)
+    print(f"\nTest 3: Jan 1 (holiday) to Jan 3")
+    print(f"Business hours: {hours:.2f}h (should exclude Jan 1)")

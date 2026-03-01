@@ -38,17 +38,13 @@ print()
 
 # Calculates the difference between dates and converts to hours, only in business hours
 # Calculating row by row with apply
-def calculate_business_hours(row):
-    return calculate_business_hours(
-    row['timestamp_created_at'], 
-    row['timestamp_updated_at'],
-    holidays = get_holidays_for_date_range(
+def calculate_business_hours_row(row): 
+    return calculate_business_hours(    
         row['timestamp_created_at'], 
         row['timestamp_updated_at']
-        )
     )
 
-df_gold['resolution_time_hours'] = df_gold.apply(calculate_business_hours, axis=1) 
+df_gold['resolution_time_hours'] = df_gold.apply(calculate_business_hours_row, axis=1) 
 
 # Check if the  calculation is correctly applied.
 print("=== RESOLUTION TIME CALCULATED ===")
