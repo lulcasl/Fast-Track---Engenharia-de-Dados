@@ -1,0 +1,12 @@
+# Python Data Engineering Challenge - JIRA
+# Requirements file for project dependencies
+
+# Data manipulation and analysis
+pandas>=2.0.0
+
+# Note: All other modules used are part of Python's standard library:
+# - json (built-in)
+# - urllib (built-in)
+# - datetime (built-in)
+# - os (built-in)
+# - sys (built-in)
