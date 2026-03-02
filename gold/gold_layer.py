@@ -36,12 +36,20 @@ print()
 # Step 3: Calculate resolution time and SLA compliance
 # ====================================================================
 
+# Get min and max dates to determine which years we need
+min_date = df_gold['timestamp_created_at'].min()
+max_date = df_gold['timestamp_updated_at'].max()
+# Fetch holidays ONCE for all years needed
+all_holidays = get_holidays_for_date_range(min_date, max_date)
+
+
 # Calculates the difference between dates and converts to hours, only in business hours
 # Calculating row by row with apply
 def calculate_business_hours_row(row): 
     return calculate_business_hours(    
         row['timestamp_created_at'], 
-        row['timestamp_updated_at']
+        row['timestamp_updated_at'],
+        all_holidays
     )
 
 df_gold['resolution_time_hours'] = df_gold.apply(calculate_business_hours_row, axis=1) 
