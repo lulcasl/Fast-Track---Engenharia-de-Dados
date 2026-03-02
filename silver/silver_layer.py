@@ -75,11 +75,11 @@ df_silver = df_silver.drop(columns=['issue_assignee'])
 df_silver = df_silver.drop(columns=['issue_timestamps'])
 
 # Checking final data
-print("=== DADOS GERAIS v2 ===")
+print("=== GENERAL DATA ===")
 print(df_silver.head(), "\n")
 df_silver.info()
-print("\n", f"Total de linhas: {len(df_silver)}")
-print(f"Total de colunas: {len(df_silver.columns)}", "\n")
+print("\n", f"Line total: {len(df_silver)}")
+print(f"Column total: {len(df_silver.columns)}", "\n")
 
 # ====================================================================
 # Step 3: Set the correct data types for each column
@@ -90,7 +90,7 @@ df_silver['timestamp_updated_at'] = pd.to_datetime(df_silver['timestamp_updated_
 df_silver['timestamp_created_at'] = pd.to_datetime(df_silver['timestamp_created_at'], errors='coerce')
 
 # Check data types after conversion
-print("Tipos de dados das colunas de data:")
+print("Data type of date columns:")
 print(df_silver[['timestamp_created_at', 'timestamp_updated_at']].dtypes)
 print()
 

@@ -4,10 +4,10 @@ from datetime import datetime, timedelta
 
 def get_brazilian_holidays(year):
    
-    # URL da API
+    # API URL
     url = f"https://brasilapi.com.br/api/feriados/v1/{year}"
     
-    # Criar requisição com User-Agent (se identifica como navegador)
+    # User-Agent Requisition - (Identify as browser)
     req = Request(url)
     req.add_header('User-Agent', 'Mozilla/5.0')
     
@@ -64,7 +64,6 @@ def calculate_business_hours(start_date, end_date, holidays=None):
     # Set working interval
     start_work_hour = 9 
     end_work_hour = 17
-    total_work_hours = end_work_hour - start_work_hour
 
     # Convert holidays to date only format
     holiday_dates = [h.date() for h in holidays]

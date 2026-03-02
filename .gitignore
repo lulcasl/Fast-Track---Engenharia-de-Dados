@@ -4,3 +4,4 @@ silver/silver_issues.json
 gold/gold_sla_issues.json
 gold/gold_sla_by_analyst.csv
 gold/gold_sla_by_issue_type.csv
+gold/__pycache__/calculate_sla.cpython-311.pyc
