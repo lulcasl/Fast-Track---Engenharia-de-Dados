@@ -30,7 +30,7 @@ The pipeline follows the **Medallion Architecture** pattern:
 
 ```
 ┌─────────────┐     ┌─────────────┐     ┌─────────────┐
-│   Bronze    │────▶│   Silver    │────▶│    Gold     │
+│   Bronze    │───▶│   Silver    │────▶│    Gold     │
 │  Raw Data   │     │  Cleaned    │     │  Business   │
 │             │     │  Normalized │     │   Metrics   │
 └─────────────┘     └─────────────┘     └─────────────┘
